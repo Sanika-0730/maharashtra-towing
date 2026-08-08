@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Maharashtra Towing Service | Accounts & Profit</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+</head>
+
+
+<body data-page="accounts">
+
+
+  <!-- ==============================
+       NAVIGATION
+  =============================== -->
+
+  <nav class="nav">
+
+    <a
+      class="brand"
+      href="index.html"
+    >
+
+      <img
+        src="assets/logo.jpeg"
+        alt="Maharashtra Towing Service logo"
+      >
+
+      <span>
+
+        <strong>
+          MAHARASHTRA
+        </strong>
+
+        <b>
+          TOWING SERVICE
+        </b>
+
+      </span>
+
+    </a>
+
+
+    <div class="navlinks">
+
+      <a href="index.html">
+        Vehicle Records
+      </a>
+
+      <a
+        class="active"
+        href="accounts.html"
+      >
+        Accounts &amp; Profit
+      </a>
+
+    </div>
+
+
+    <span class="service">
+      ● 24/7 TOWING SERVICE
+    </span>
+
+  </nav>
+
+
+
+  <!-- ==============================
+       MAIN
+  =============================== -->
+
+  <main class="shell">
+
+
+    <!-- ==============================
+         HERO
+    =============================== -->
+
+    <section class="hero account-hero">
+
+      <div class="hero-copy">
+
+        <span class="kicker">
+          SMART BUSINESS TRACKING
+        </span>
+
+        <h1>
+          Let your business grow.
+          <br>
+          Track every earning.
+        </h1>
+
+        <p>
+          Turn every towing job into clear,
+          simple business insight.
+        </p>
+
+      </div>
+
+
+      <div class="hero-badge">
+
+        <span>
+          ₹
+        </span>
+
+        <small>
+          PROFIT
+          <br>
+          TRACKER
+        </small>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         DAILY EXPENSE SECTION
+    =============================== -->
+
+    <section class="daily-section">
+
+
+      <!-- DAILY HEADER -->
+
+      <div class="daily-header">
+
+        <div class="daily-title">
+
+          <span class="kicker red">
+            DAILY EXPENSE ENTRY
+          </span>
+
+          <h2>
+            Today's Towing Vehicles
+          </h2>
+
+          <p>
+            Enter diesel and maintenance expenses
+            for today's towing jobs.
+          </p>
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="center-date">
+
+          <label>
+
+            SELECT DATE
+
+            <input
+              id="accountDate"
+              type="date"
+            >
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ==============================
+           VEHICLE JOBS
+      =============================== -->
+
+      <div
+        id="jobsList"
+        class="job-list"
+      >
+      </div>
+
+
+
+      <!-- ==============================
+           SAVE BAR
+      =============================== -->
+
+      <div class="save-bar">
+
+        <span id="dailyProfitLabel">
+          Profit for selected date
+          <b>₹0</b>
+        </span>
+
+
+        <button
+          id="saveAccounts"
+          class="btn"
+          type="button"
+        >
+
+          Save Today's Entries
+
+          <b>
+            →
+          </b>
+
+        </button>
+
+
+        <span
+          id="accountMessage"
+          class="message"
+          aria-live="polite"
+        ></span>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         PROFIT SUMMARY
+    =============================== -->
+
+    <section class="title-row section-space">
+
+      <div>
+
+        <span class="kicker red">
+          PROFIT SUMMARY
+        </span>
+
+        <h2>
+          Calculate profit for any period
+        </h2>
+
+      </div>
+
+
+      <div class="filters">
+
+
+        <label>
+
+          From
+
+          <input
+            id="fromDate"
+            type="date"
+          >
+
+        </label>
+
+
+        <label>
+
+          To
+
+          <input
+            id="toDate"
+            type="date"
+          >
+
+        </label>
+
+
+        <button
+          id="calculate"
+          class="btn outline"
+          type="button"
+        >
+          Calculate
+        </button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         SUMMARY CARDS
+    =============================== -->
+
+    <section class="summary-grid">
+
+
+      <!-- TOTAL CHARGES -->
+
+      <article>
+
+        <span class="summary-icon blue">
+          ₹
+        </span>
+
+        <div>
+
+          <small>
+            Total Charges
+          </small>
+
+          <strong id="totalCharges">
+            ₹0
+          </strong>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- TOTAL DIESEL -->
+
+      <article>
+
+        <span class="summary-icon orange">
+          ⛽
+        </span>
+
+        <div>
+
+          <small>
+            Total Diesel
+          </small>
+
+          <strong id="totalDiesel">
+            ₹0
+          </strong>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- MAINTENANCE -->
+
+      <article>
+
+        <span class="summary-icon redbg">
+          ⚙
+        </span>
+
+        <div>
+
+          <small>
+            Maintenance
+          </small>
+
+          <strong id="totalMaintenance">
+            ₹0
+          </strong>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- NET PROFIT -->
+
+      <article class="profit-box">
+
+        <span class="summary-icon green">
+          ✓
+        </span>
+
+        <div>
+
+          <small>
+            Net Profit
+          </small>
+
+          <strong id="totalProfit">
+            ₹0
+          </strong>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+
+    <!-- ==============================
+         MONTHLY PERFORMANCE
+    =============================== -->
+
+    <section class="title-row section-space">
+
+      <div>
+
+        <span class="kicker red">
+          MONTHLY PERFORMANCE
+        </span>
+
+        <h2>
+          Profit by month
+        </h2>
+
+      </div>
+
+    </section>
+
+
+    <section class="card table-card">
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Month
+              </th>
+
+              <th>
+                Vehicles
+              </th>
+
+              <th>
+                Total Charges
+              </th>
+
+              <th>
+                Diesel
+              </th>
+
+              <th>
+                Maintenance
+              </th>
+
+              <th>
+                Net Profit
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="monthlyBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         NO TOWING DAYS
+    =============================== -->
+
+    <section class="title-row section-space">
+
+      <div>
+
+        <span class="kicker red">
+          NO TOWING DAYS
+        </span>
+
+        <h2>
+          Days without a job
+        </h2>
+
+      </div>
+
+
+      <label class="date-pick">
+
+        Select month
+
+        <input
+          id="monthPick"
+          type="month"
+        >
+
+      </label>
+
+    </section>
+
+
+    <section class="card idle-card">
+
+      <p id="idleIntro">
+        No-data days will appear here.
+      </p>
+
+      <div
+        id="idleDays"
+        class="idle-days"
+      >
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         EXPENSE HISTORY
+    =============================== -->
+
+    <section class="title-row section-space">
+
+      <div>
+
+        <span class="kicker red">
+          ALL VEHICLE EXPENSES
+        </span>
+
+        <h2>
+          Complete expense history
+        </h2>
+
+      </div>
+
+    </section>
+
+
+    <section class="card table-card">
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Date
+              </th>
+
+              <th>
+                Vehicle
+              </th>
+
+              <th>
+                Route
+              </th>
+
+              <th>
+                Charges
+              </th>
+
+              <th>
+                Diesel
+              </th>
+
+              <th>
+                Maintenance
+              </th>
+
+              <th>
+                Maintenance Details
+              </th>
+
+              <th>
+                Profit
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="expensesBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- ==============================
+       FOOTER
+  =============================== -->
+
+  <footer>
+    Maharashtra Towing Service ·
+    Accounts &amp; Profit
+  </footer>
+
+
+
+  <!-- ==============================
+       JAVASCRIPT
+  =============================== -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>

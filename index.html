@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Maharashtra Towing Service | Vehicle Records</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+</head>
+
+
+<body data-page="records">
+
+  <!-- ==============================
+       NAVIGATION
+  =============================== -->
+
+  <nav class="nav">
+
+    <a
+      class="brand"
+      href="index.html"
+    >
+
+      <img
+        src="assets/logo.jpeg"
+        alt="Maharashtra Towing Service logo"
+      >
+
+      <span>
+
+        <strong>
+          MAHARASHTRA
+        </strong>
+
+        <b>
+          TOWING SERVICE
+        </b>
+
+      </span>
+
+    </a>
+
+
+    <div class="navlinks">
+
+      <a
+        class="active"
+        href="index.html"
+      >
+        Vehicle Records
+      </a>
+
+      <a href="accounts.html">
+        Accounts &amp; Profit
+      </a>
+
+    </div>
+
+
+    <span class="service">
+      ● 24/7 TOWING SERVICE
+    </span>
+
+  </nav>
+
+
+
+  <!-- ==============================
+       MAIN CONTENT
+  =============================== -->
+
+  <main class="shell">
+
+
+    <!-- ==============================
+         HERO
+    =============================== -->
+
+    <section class="hero records-hero">
+
+      <div class="hero-copy">
+
+        <span class="kicker">
+          RELIABLE. FAST. PROFESSIONAL.
+        </span>
+
+        <h1>
+          Maharashtra
+          <br>
+          Towing Service
+        </h1>
+
+        <p>
+          Keep every towing job organised
+          in one secure digital register.
+        </p>
+
+      </div>
+
+
+      <img
+        src="assets/towing-van.jpeg"
+        alt="Maharashtra Towing Service vehicle"
+      >
+
+    </section>
+
+
+
+    <!-- ==============================
+         ADD VEHICLE RECORD
+    =============================== -->
+
+    <section class="title-row">
+
+      <div>
+
+        <span class="kicker red">
+          NEW VEHICLE RECORD
+        </span>
+
+        <h2>
+          Add a towing job
+        </h2>
+
+      </div>
+
+
+      <p>
+        Save each vehicle separately.
+        You can add any number of vehicles
+        for the same date.
+      </p>
+
+    </section>
+
+
+
+    <section class="card form-card">
+
+      <form id="recordForm">
+
+        <div class="grid three">
+
+
+          <!-- DATE -->
+
+          <label>
+
+            Date *
+
+            <input
+              id="date"
+              name="date"
+              type="date"
+              required
+            >
+
+          </label>
+
+
+
+          <!-- VEHICLE NUMBER -->
+
+          <label>
+
+            Vehicle Number *
+
+            <input
+              name="vehicle"
+              type="text"
+              placeholder="MH 12 AB 1234"
+              autocomplete="off"
+              required
+            >
+
+          </label>
+
+
+
+          <!-- CONTACT -->
+
+          <label>
+
+            Contact Number *
+
+            <input
+              name="contact"
+              type="tel"
+              inputmode="numeric"
+              maxlength="10"
+              placeholder="98765 43210"
+              autocomplete="tel"
+              required
+            >
+
+          </label>
+
+
+
+          <!-- PICKUP -->
+
+          <label>
+
+            Pickup Location *
+
+            <input
+              name="pickup"
+              type="text"
+              placeholder="e.g. Pune"
+              autocomplete="off"
+              required
+            >
+
+          </label>
+
+
+
+          <!-- DROP -->
+
+          <label>
+
+            Drop Location *
+
+            <input
+              name="drop"
+              type="text"
+              placeholder="e.g. Mumbai"
+              autocomplete="off"
+              required
+            >
+
+          </label>
+
+
+
+          <!-- CHARGES -->
+
+          <label>
+
+            Charges (₹) *
+
+            <input
+              name="charges"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="0"
+              required
+            >
+
+          </label>
+
+        </div>
+
+
+
+        <!-- SAVE -->
+
+        <button
+          class="btn"
+          type="submit"
+        >
+
+          Save Vehicle Record
+
+          <b>
+            →
+          </b>
+
+        </button>
+
+
+        <span
+          id="recordMessage"
+          class="message"
+          aria-live="polite"
+        ></span>
+
+      </form>
+
+    </section>
+
+
+
+    <!-- ==============================
+         SAVED VEHICLES
+    =============================== -->
+
+    <section class="title-row section-space">
+
+      <div>
+
+        <span class="kicker red">
+          SAVED VEHICLES
+        </span>
+
+        <h2>
+          Vehicle movement register
+        </h2>
+
+      </div>
+
+
+
+      <!-- FILTERS -->
+
+      <div class="filters">
+
+
+        <label>
+
+          Search by Date
+
+          <input
+            id="dateSearch"
+            type="date"
+          >
+
+        </label>
+
+
+
+        <label>
+
+          Search Vehicle Number
+
+          <input
+            id="vehicleSearch"
+            type="search"
+            placeholder="MH 12..."
+            autocomplete="off"
+          >
+
+        </label>
+
+
+
+        <button
+          id="clearSearch"
+          class="btn outline"
+          type="button"
+        >
+          Clear filters
+        </button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         VEHICLE TABLE
+    =============================== -->
+
+    <section class="card table-card">
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Date
+              </th>
+
+              <th>
+                Vehicle Number
+              </th>
+
+              <th>
+                Contact
+              </th>
+
+              <th>
+                Pickup
+              </th>
+
+              <th>
+                Drop
+              </th>
+
+              <th>
+                Charges
+              </th>
+
+              <th>
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="recordsBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- ==============================
+       FOOTER
+  =============================== -->
+
+  <footer>
+    Maharashtra Towing Service · Vehicle Records
+  </footer>
+
+
+
+  <!-- ==============================
+       JAVASCRIPT
+  =============================== -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>

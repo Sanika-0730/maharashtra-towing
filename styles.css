@@ -1,0 +1,584 @@
+:root{--black:#101216;--ink:#1b2029;--red:#dc1d2f;--red2:#ff4252;--blue:#277fc5;--paper:#fff;--bg:#f5f6f8;--line:#e3e6eb;--muted:#6d7787;--green:#109b66;--softred:#fff0f1}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px Manrope,sans-serif}.nav{height:82px;background:#fff;display:flex;align-items:center;gap:38px;border-bottom:1px solid var(--line);padding:0 max(22px,calc((100% - 1200px)/2))}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#20232a;font-size:10px;line-height:1.1;letter-spacing:.1em}.brand img{width:49px;height:49px;border-radius:50%;object-fit:cover;border:2px solid var(--red)}.brand b{font:800 15px 'Barlow Condensed',sans-serif;letter-spacing:.04em}.navlinks{align-self:stretch;display:flex}.navlinks a{align-items:center;border-bottom:3px solid transparent;color:#737c8d;display:flex;font-weight:700;padding:0 18px;text-decoration:none}.navlinks .active{border-color:var(--red);color:var(--red)}.service{margin-left:auto;color:var(--red);font-size:11px;font-weight:800}.shell{max-width:1200px;margin:auto;padding:38px 24px 60px}.hero{min-height:260px;display:flex;overflow:hidden;border-radius:16px;background:var(--black);color:#fff}.hero-copy{padding:43px 18px 40px 45px;z-index:1}.kicker{color:#a9cbed;font-size:10px;font-weight:800;letter-spacing:.15em}.kicker.red{color:var(--red)}h1,h2{margin:0;font-family:'Barlow Condensed',sans-serif;letter-spacing:.01em}h1{font-size:49px;line-height:.94;text-transform:uppercase}h2{font-size:28px}.hero p{max-width:410px;color:#c3cbd6;margin:14px 0 0}.records-hero img{width:52%;object-fit:cover;object-position:center}.account-hero{background:linear-gradient(112deg,#090b10,#242e3e)}.hero-badge{margin-left:auto;width:42%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle,#dc1d2f48,transparent 58%)}.hero-badge span{font:800 92px 'Barlow Condensed',sans-serif;color:var(--red2);line-height:.7}.hero-badge small{letter-spacing:.17em;font-size:11px;font-weight:800;margin-top:15px}.title-row{margin:31px 0 14px;display:flex;justify-content:space-between;align-items:end;gap:18px}.title-row>p{color:var(--muted);font-size:12px;max-width:385px;margin:0}.card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 3px 12px #1c27350a}.form-card{padding:25px}.grid{display:grid;gap:16px}.three{grid-template-columns:repeat(3,1fr)}label{color:#4d596b;font-size:12px;font-weight:700}input,textarea{display:block;width:100%;margin-top:6px;border:1px solid #d9dfe8;border-radius:7px;background:#fff;color:#20242c;padding:10px 11px;font:14px Manrope,sans-serif}input:focus,textarea:focus{outline:2px solid #f6cdd2;border-color:var(--red)}textarea{min-height:42px;resize:vertical}.btn{border:0;border-radius:7px;background:var(--red);color:#fff;cursor:pointer;font:800 13px Manrope,sans-serif;margin-top:19px;padding:11px 16px}.btn:hover{background:#bc1023}.btn b{font-size:16px;margin-left:7px}.btn.outline{margin:0;background:#fff;border:1px solid #edb9bf;color:var(--red)}.message{color:var(--green);font-size:12px;font-weight:700;margin-left:10px}.section-space{margin-top:40px}.filters{display:flex;gap:10px;align-items:end}.filters label{min-width:155px}.filters input{padding:8px 10px}.table-card{overflow:hidden}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap}th{background:#fafafb;border-bottom:1px solid var(--line);color:#727d8d;font-size:10px;letter-spacing:.08em;padding:13px 16px;text-align:left;text-transform:uppercase}td{border-bottom:1px solid #edf0f3;color:#465264;padding:15px 16px}.empty{text-align:center!important;color:var(--muted);padding:31px!important}.delete{border:1px solid #f0c9ce;border-radius:5px;background:#fff;color:#c62332;cursor:pointer;font-size:11px;padding:5px 8px}.date-pick{min-width:160px}.job-list{display:grid;gap:11px}.job{display:grid;grid-template-columns:1.35fr .8fr .8fr 1.1fr;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;padding:15px 17px}.job-title b{display:block;font-size:15px}.job-title small{color:var(--muted);font-size:11px}.job .charge{color:#172131;font-weight:800}.job label{font-size:10px}.job input,.job textarea{margin-top:3px;padding:8px}.save-bar{display:flex;align-items:center;gap:15px;justify-content:flex-end;margin-top:13px}.save-bar>span:first-child{margin-right:auto;color:#687688;font-weight:700}.save-bar b{color:var(--green);font-size:18px}.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.summary-grid article{align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;display:flex;gap:12px;padding:19px}.summary-grid small{color:var(--muted);display:block}.summary-grid strong{display:block;font:800 23px 'Barlow Condensed',sans-serif}.summary-icon{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:17px;font-weight:800}.blue{background:#e8f3fd;color:var(--blue)}.orange{background:#fff3de;color:#c27500}.redbg{background:#fff0f1;color:var(--red)}.green{background:#e3f7ef;color:var(--green)}.profit-box{background:#f0fbf6!important;border-color:#c7ecd9!important}.profit-box strong{color:var(--green);font-size:27px}.idle-card{padding:21px}.idle-card p{margin:0 0 14px;color:var(--muted);font-size:12px}.idle-days{display:flex;flex-wrap:wrap;gap:8px}.idle-day{border-radius:6px;background:var(--softred);color:#b91d2c;font-size:11px;font-weight:800;padding:7px 9px}.good{color:var(--green);font-weight:700}footer{text-align:center;color:#8a94a1;font-size:11px;padding:0 0 28px}@media(max-width:900px){.three{grid-template-columns:1fr 1fr}.summary-grid{grid-template-columns:1fr 1fr}.job{grid-template-columns:1fr 1fr}.nav{gap:12px}.service{display:none}}@media(max-width:570px){.nav{padding:0 14px}.brand span{display:none}.navlinks a{padding:0 8px;font-size:11px}.shell{padding:22px 14px 45px}.hero-copy{padding:31px 25px}.hero h1{font-size:39px}.records-hero img,.hero-badge{display:none}.three,.summary-grid,.job{grid-template-columns:1fr}.title-row{align-items:start;flex-direction:column}.filters{width:100%;flex-wrap:wrap}.filters label,.date-pick{width:100%}.save-bar{align-items:flex-start;flex-direction:column}.save-bar .btn{margin-top:0}}
+```css
+/* =====================================================
+   ACCOUNTS PAGE - NEW DAILY VEHICLE SECTION
+   ===================================================== */
+
+body[data-page="accounts"] {
+  background:
+    linear-gradient(
+      180deg,
+      #eef2f6 0%,
+      #f7f8fa 45%,
+      #eef1f5 100%
+    );
+}
+
+
+/* -------------------------------
+   Navbar Brand
+   ------------------------------- */
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 3px;
+}
+
+.brand-text strong {
+  color: #11151c;
+  font: 900 17px 'Barlow Condensed', sans-serif;
+  letter-spacing: .04em;
+}
+
+.brand-text b {
+  color: var(--red);
+  font: 800 12px 'Barlow Condensed', sans-serif;
+  letter-spacing: .10em;
+}
+
+
+/* -------------------------------
+   Daily Towing Section
+   ------------------------------- */
+
+.daily-section {
+  margin-top: 32px;
+  background: #ffffff;
+  border: 1px solid #dfe4ea;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 25px rgba(25, 35, 50, .07);
+  overflow: hidden;
+}
+
+
+/* Header */
+
+.daily-header {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  align-items: center;
+  gap: 30px;
+
+  padding: 24px 27px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #f8fafc 0%,
+      #edf4fa 100%
+    );
+
+  border-bottom: 1px solid #e1e6ec;
+}
+
+.daily-title h2 {
+  margin: 5px 0 5px;
+  font-size: 30px;
+}
+
+.daily-title p {
+  margin: 0;
+  color: #758091;
+  font-size: 12px;
+}
+
+
+/* Date */
+
+.center-date {
+  background: #ffffff;
+  border: 1px solid #dfe4ea;
+  border-top: 3px solid var(--red);
+  border-radius: 10px;
+  padding: 12px 14px;
+
+  box-shadow:
+    0 4px 12px rgba(25, 35, 50, .06);
+}
+
+.center-date label {
+  display: block;
+  color: #6b7584;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.center-date input {
+  margin-top: 5px;
+  border: 0;
+  padding: 4px 0 0;
+  background: transparent;
+  font-weight: 800;
+  color: #17202c;
+}
+
+.center-date input:focus {
+  outline: none;
+}
+
+
+/* -------------------------------
+   Compact Vehicle Rows
+   ------------------------------- */
+
+.daily-section .job-list {
+  display: block;
+  padding: 8px 18px 4px;
+}
+
+
+/*
+   प्रत्येक vehicle आता मोठ्या वेगळ्या card मध्ये
+   नसून compact horizontal row मध्ये दिसेल.
+*/
+
+.daily-section .job {
+  display: grid;
+
+  grid-template-columns:
+    1.35fr
+    .65fr
+    .75fr
+    1.15fr;
+
+  gap: 15px;
+
+  align-items: center;
+
+  margin: 0;
+
+  padding: 12px 13px;
+
+  background: #ffffff;
+
+  border: 0;
+  border-bottom: 1px solid #e9edf1;
+
+  border-left: 4px solid #dce4ec;
+
+  border-radius: 0;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease;
+}
+
+
+/* First vehicle */
+
+.daily-section .job:first-child {
+  border-radius: 9px 9px 0 0;
+}
+
+
+/* Last vehicle */
+
+.daily-section .job:last-child {
+  border-bottom: 0;
+  border-radius: 0 0 9px 9px;
+}
+
+
+/* Hover */
+
+.daily-section .job:hover {
+  background: #f8fafc;
+  border-left-color: var(--red);
+}
+
+
+/* Vehicle */
+
+.daily-section .job-title b {
+  color: #171d27;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.daily-section .job-title small {
+  display: block;
+  margin-top: 3px;
+  color: #7a8594;
+  font-size: 10px;
+}
+
+
+/* Charges */
+
+.daily-section .job .charge {
+  color: #277fc5;
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.daily-section .job .charge b {
+  color: #172131;
+  font-size: 14px;
+}
+
+
+/* Input labels */
+
+.daily-section .job label {
+  color: #687484;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+
+/* Inputs */
+
+.daily-section .job input,
+.daily-section .job textarea {
+  margin-top: 4px;
+
+  border: 1px solid #dce2e9;
+  border-radius: 6px;
+
+  background: #f8fafc;
+
+  padding: 7px 8px;
+
+  font-size: 12px;
+}
+
+.daily-section .job input:focus,
+.daily-section .job textarea:focus {
+  background: #fff;
+  border-color: var(--red);
+  outline: 2px solid #f9d8dc;
+}
+
+.daily-section .job textarea {
+  min-height: 30px;
+  height: 30px;
+  resize: none;
+}
+
+
+/* Diesel colour */
+
+.daily-section .job:nth-child(odd) {
+  border-left-color: #e9b44c;
+}
+
+.daily-section .job:nth-child(even) {
+  border-left-color: #4a9bd5;
+}
+
+
+/* -------------------------------
+   Save Bar
+   ------------------------------- */
+
+.daily-section .save-bar {
+  margin: 0;
+  padding: 15px 22px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f5f9fc,
+      #eef8f4
+    );
+
+  border-top: 1px solid #e1e6eb;
+}
+
+.daily-section .save-bar > span:first-child {
+  color: #657181;
+  font-size: 12px;
+}
+
+.daily-section .save-bar > span:first-child b {
+  margin-left: 5px;
+  color: var(--green);
+  font-size: 20px;
+}
+
+
+/* -------------------------------
+   Empty State
+   ------------------------------- */
+
+.daily-section #jobsList > .card {
+  margin: 10px 0;
+  background: #f8fafc;
+  border: 1px dashed #cfd6df;
+  color: #6e7988;
+}
+
+
+/* -------------------------------
+   Other Cards
+   ------------------------------- */
+
+body[data-page="accounts"] .summary-grid article {
+  box-shadow: 0 5px 16px rgba(25, 35, 50, .045);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+body[data-page="accounts"] .summary-grid article:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(25, 35, 50, .09);
+}
+
+
+/* Tables */
+
+body[data-page="accounts"] .table-card {
+  box-shadow: 0 5px 18px rgba(25, 35, 50, .05);
+}
+
+
+/* -------------------------------
+   Account Hero
+   ------------------------------- */
+
+body[data-page="accounts"] .account-hero {
+  border: 1px solid #283344;
+  box-shadow: 0 10px 28px rgba(10, 15, 25, .14);
+}
+
+body[data-page="accounts"] .account-hero h1 {
+  color: #ffffff;
+}
+
+body[data-page="accounts"] .account-hero p {
+  color: #bfc8d4;
+}
+
+
+/* -------------------------------
+   Mobile
+   ------------------------------- */
+
+@media (max-width: 900px) {
+
+  .daily-header {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .center-date {
+    max-width: 280px;
+  }
+
+  .daily-section .job {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+
+@media (max-width: 570px) {
+
+  .daily-section {
+    margin-top: 22px;
+    border-radius: 12px;
+  }
+
+  .daily-header {
+    padding: 19px 16px;
+  }
+
+  .daily-title h2 {
+    font-size: 26px;
+  }
+
+  .center-date {
+    max-width: none;
+    width: 100%;
+  }
+
+  .daily-section .job-list {
+    padding: 5px 10px;
+  }
+
+  .daily-section .job {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    padding: 12px 10px;
+  }
+
+  .daily-section .job-title {
+    grid-column: 1 / -1;
+  }
+
+  .daily-section .job .charge {
+    align-self: center;
+  }
+
+  .daily-section .save-bar {
+    padding: 15px;
+  }
+
+  .daily-section .save-bar .btn {
+    width: 100%;
+  }
+
+}
+```
+```css
+/* Logo text - final fix */
+.brand > span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 2px;
+}
+
+.brand > span strong {
+  display: block;
+  color: #101216;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.brand > span b {
+  display: block;
+  color: #20232a;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+```
+/* =====================================================
+   VEHICLE RECORDS HERO - IMAGE & TEXT FIX
+===================================================== */
+
+.records-hero {
+  min-height: 360px;
+  display: grid;
+  grid-template-columns: 46% 54%;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #101216;
+}
+
+
+/* LEFT TEXT AREA */
+
+.records-hero .hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 48px 38px 48px 45px;
+
+  min-width: 0;
+}
+
+
+.records-hero .hero-copy .kicker {
+  margin-bottom: 10px;
+}
+
+
+.records-hero .hero-copy h1 {
+  font-size: 52px;
+  line-height: .94;
+  margin: 0;
+}
+
+
+.records-hero .hero-copy p {
+  max-width: 430px;
+  margin-top: 18px;
+
+  color: #c7ced8;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* RIGHT IMAGE */
+
+.records-hero > img {
+  width: 100%;
+  height: 360px;
+
+  display: block;
+
+  /*
+    contain मुळे पूर्ण towing vehicle दिसेल.
+    Image crop होणार नाही.
+  */
+  object-fit: contain;
+  object-position: center;
+
+  background: #101216;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .records-hero {
+    grid-template-columns: 48% 52%;
+    min-height: 320px;
+  }
+
+  .records-hero .hero-copy {
+    padding: 35px 25px;
+  }
+
+  .records-hero .hero-copy h1 {
+    font-size: 43px;
+  }
+
+  .records-hero > img {
+    height: 320px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 570px) {
+
+  .records-hero {
+    display: flex;
+    flex-direction: column;
+
+    min-height: auto;
+  }
+
+  .records-hero .hero-copy {
+    padding: 30px 24px 25px;
+  }
+
+  .records-hero .hero-copy h1 {
+    font-size: 40px;
+  }
+
+  .records-hero .hero-copy p {
+    margin-top: 12px;
+    font-size: 12px;
+  }
+
+  .records-hero > img {
+    width: 100%;
+    height: 250px;
+
+    object-fit: contain;
+    background: #101216;
+  }
+
+}
