@@ -87,7 +87,6 @@
   </nav>
 
 
-
   <!-- ==============================
        MAIN CONTENT
   =============================== -->
@@ -129,7 +128,6 @@
     </section>
 
 
-
     <!-- ==============================
          ADD VEHICLE RECORD
     =============================== -->
@@ -158,10 +156,23 @@
     </section>
 
 
-
     <section class="card form-card">
 
       <form id="recordForm">
+
+        <!--
+          Unique ID
+
+          This will be used later to keep
+          Vehicle Records and Accounts synced.
+        -->
+        <input
+          type="hidden"
+          id="recordId"
+          name="recordId"
+          value=""
+        >
+
 
         <div class="grid three">
 
@@ -182,7 +193,6 @@
           </label>
 
 
-
           <!-- VEHICLE NUMBER -->
 
           <label>
@@ -190,6 +200,7 @@
             Vehicle Number *
 
             <input
+              id="vehicle"
               name="vehicle"
               type="text"
               placeholder="MH 12 AB 1234"
@@ -200,7 +211,6 @@
           </label>
 
 
-
           <!-- CONTACT -->
 
           <label>
@@ -208,6 +218,7 @@
             Contact Number *
 
             <input
+              id="contact"
               name="contact"
               type="tel"
               inputmode="numeric"
@@ -220,7 +231,6 @@
           </label>
 
 
-
           <!-- PICKUP -->
 
           <label>
@@ -228,6 +238,7 @@
             Pickup Location *
 
             <input
+              id="pickup"
               name="pickup"
               type="text"
               placeholder="e.g. Pune"
@@ -238,7 +249,6 @@
           </label>
 
 
-
           <!-- DROP -->
 
           <label>
@@ -246,6 +256,7 @@
             Drop Location *
 
             <input
+              id="drop"
               name="drop"
               type="text"
               placeholder="e.g. Mumbai"
@@ -256,7 +267,6 @@
           </label>
 
 
-
           <!-- CHARGES -->
 
           <label>
@@ -264,6 +274,7 @@
             Charges (₹) *
 
             <input
+              id="charges"
               name="charges"
               type="number"
               min="0"
@@ -277,15 +288,19 @@
         </div>
 
 
-
-        <!-- SAVE -->
+        <!-- ==============================
+             SAVE BUTTON
+        =============================== -->
 
         <button
+          id="saveRecordBtn"
           class="btn"
           type="submit"
         >
 
-          Save Vehicle Record
+          <span id="saveRecordText">
+            Save Vehicle Record
+          </span>
 
           <b>
             →
@@ -294,16 +309,20 @@
         </button>
 
 
+        <!-- ==============================
+             MESSAGE
+        =============================== -->
+
         <span
           id="recordMessage"
           class="message"
           aria-live="polite"
         ></span>
 
+
       </form>
 
     </section>
-
 
 
     <!-- ==============================
@@ -325,7 +344,6 @@
       </div>
 
 
-
       <!-- FILTERS -->
 
       <div class="filters">
@@ -343,7 +361,6 @@
         </label>
 
 
-
         <label>
 
           Search Vehicle Number
@@ -358,7 +375,6 @@
         </label>
 
 
-
         <button
           id="clearSearch"
           class="btn outline"
@@ -370,7 +386,6 @@
       </div>
 
     </section>
-
 
 
     <!-- ==============================
@@ -421,6 +436,12 @@
 
 
           <tbody id="recordsBody">
+
+            <!--
+              Records are loaded dynamically
+              by app.js.
+            -->
+
           </tbody>
 
         </table>
@@ -429,8 +450,8 @@
 
     </section>
 
-  </main>
 
+  </main>
 
 
   <!-- ==============================
@@ -440,7 +461,6 @@
   <footer>
     Maharashtra Towing Service · Vehicle Records
   </footer>
-
 
 
   <!-- ==============================
