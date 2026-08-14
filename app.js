@@ -1,28 +1,40 @@
 /* =====================================================
    MAHARASHTRA TOWING SERVICE
    FINAL APP.JS
-   MAINTENANCE DETAILS FIXED
+   VEHICLE PAGINATION
+   CONTACT UPDATED
+   ACCOUNTS PAGINATION
+   MAINTENANCE DETAILS
+===================================================== */
+
+
+/* =====================================================
+   GOOGLE SHEETS API
 ===================================================== */
 
 const GOOGLE_SHEET_API =
-"https://script.google.com/macros/s/AKfycbzk39uUOIYynCJcrwqNlkTzlpsTeottcUhQooeh5hitSVc3box_9MWfT2o8J6Wkx3Bv/exec";
+  "https://script.google.com/macros/s/AKfycbzk39uUOIYynCJcrwqNlkTzlpsTeottcUhQooeh5hitSVc3box_9MWfT2o8J6Wkx3Bv/exec";
 
 
 /* =====================================================
    COMMON FUNCTIONS
 ===================================================== */
 
-const $ = s => document.querySelector(s);
+const $ = selector =>
+  document.querySelector(selector);
+
 
 const today =
   new Date()
     .toISOString()
     .slice(0, 10);
 
+
 const get = key =>
   JSON.parse(
     localStorage.getItem(key) || "[]"
   );
+
 
 const put = (key, value) =>
   localStorage.setItem(
@@ -30,8 +42,10 @@ const put = (key, value) =>
     JSON.stringify(value)
   );
 
+
 const money = number =>
   `₹${Number(number || 0).toLocaleString("en-IN")}`;
+
 
 const esc = value =>
   String(value ?? "").replace(
@@ -46,13 +60,19 @@ const esc = value =>
       })[character]
   );
 
+
 const fmt = date =>
-  new Date(`${date}T00:00:00`)
-    .toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
+  date
+    ? new Date(`${date}T00:00:00`)
+        .toLocaleDateString(
+          "en-IN",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          }
+        )
+    : "—";
 
 
 /* =====================================================
@@ -80,7 +100,8 @@ const sendToGoogleSheets = data => {
 
         keepalive: true
       }
-    ).catch(error => {
+    )
+    .catch(error => {
 
       console.error(
         "Google Sheets error:",
@@ -89,7 +110,9 @@ const sendToGoogleSheets = data => {
 
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.error(
       "Google Sheets request error:",
@@ -106,7 +129,9 @@ const sendToGoogleSheets = data => {
 ===================================================== */
 
 const getToll = account =>
-  Number(account?.toll || 0);
+  Number(
+    account?.toll || 0
+  );
 
 
 const getRepair = account =>
@@ -116,12 +141,6 @@ const getRepair = account =>
     0
   );
 
-
-/*
-   TOTAL MAINTENANCE
-
-   Toll + Repair
-*/
 
 const maintenanceTotal = account => {
 
@@ -147,24 +166,27 @@ const maintenanceTotal = account => {
 };
 
 
-/*
-   SELECTED DATE PROFIT
+/* =====================================================
+   DAILY PROFIT
 
    Charges
    - Diesel
    - Toll
 
-   IMPORTANT:
-   Repairing NOT deducted.
-*/
+   Repair is NOT deducted
+===================================================== */
 
 const correctProfit = account => {
 
   const charges =
-    Number(account?.charges || 0);
+    Number(
+      account?.charges || 0
+    );
 
   const diesel =
-    Number(account?.diesel || 0);
+    Number(
+      account?.diesel || 0
+    );
 
   const toll =
     getToll(account);
@@ -190,6 +212,19 @@ if (
     get("mts-final-records");
 
 
+  /* ===================================================
+     VEHICLE PAGINATION
+  =================================================== */
+
+  const RECORDS_PER_PAGE = 50;
+
+  let currentPage = 1;
+
+
+  /* ===================================================
+     DEFAULT DATE
+  =================================================== */
+
   if ($("#date")) {
 
     $("#date").value =
@@ -199,10 +234,46 @@ if (
 
 
   /* ===================================================
+     CONTACT NUMBER
+  =================================================== */
+
+  const contactInput =
+    $("#contact");
+
+
+  if (contactInput) {
+
+    contactInput.addEventListener(
+      "input",
+      () => {
+
+        let value =
+          contactInput.value;
+
+        value =
+          value.replace(
+            /[^0-9+\-\s()]/g,
+            ""
+          );
+
+        contactInput.value =
+          value.slice(0, 16);
+
+      }
+    );
+
+  }
+
+
+  /* ===================================================
      RENDER VEHICLES
   =================================================== */
 
   const render = () => {
+
+    records =
+      get("mts-final-records");
+
 
     const dateSearch =
       $("#dateSearch")?.value || "";
@@ -215,17 +286,24 @@ if (
         .toLowerCase() || "";
 
 
-    const list =
+    /* =================================================
+       SEARCH ALL RECORDS
+    ================================================= */
+
+    const filtered =
       records
 
         .filter(record =>
 
-          (!dateSearch ||
-            record.date === dateSearch)
+          (
+            !dateSearch ||
+            record.date === dateSearch
+          )
 
           &&
 
-          (!vehicleSearch ||
+          (
+            !vehicleSearch ||
 
             String(
               record.vehicle || ""
@@ -234,23 +312,102 @@ if (
               .includes(
                 vehicleSearch
               )
-
           )
 
         )
 
+
+        /* =============================================
+           NEWEST FIRST
+        ============================================= */
+
         .sort(
-          (a, b) =>
-            b.date.localeCompare(a.date)
+          (a, b) => {
+
+            const dateCompare =
+              String(
+                b.date || ""
+              )
+                .localeCompare(
+                  String(
+                    a.date || ""
+                  )
+                );
+
+
+            if (
+              dateCompare !== 0
+            ) {
+
+              return dateCompare;
+
+            }
+
+
+            return (
+              records.indexOf(b) -
+              records.indexOf(a)
+            );
+
+          }
         );
 
 
-    if (!$("#recordsBody")) {
+    /* =================================================
+       PAGE COUNT
+    ================================================= */
+
+    const totalPages =
+      Math.max(
+        1,
+        Math.ceil(
+          filtered.length /
+          RECORDS_PER_PAGE
+        )
+      );
+
+
+    if (
+      currentPage > totalPages
+    ) {
+
+      currentPage =
+        totalPages;
+
+    }
+
+
+    const start =
+      (
+        currentPage - 1
+      ) *
+      RECORDS_PER_PAGE;
+
+
+    const end =
+      start +
+      RECORDS_PER_PAGE;
+
+
+    const list =
+      filtered.slice(
+        start,
+        end
+      );
+
+
+    if (
+      !$("#recordsBody")
+    ) {
 
       return;
 
     }
 
+
+    /* =================================================
+       VEHICLE TABLE
+    ================================================= */
 
     $("#recordsBody").innerHTML =
 
@@ -259,50 +416,69 @@ if (
         ?
 
         list
-          .map(record => `
+          .map(
+            record => `
 
-            <tr>
+              <tr>
 
-              <td>
-                ${fmt(record.date)}
-              </td>
+                <td>
+                  ${fmt(record.date)}
+                </td>
 
-              <td>
-                <b>
-                  ${esc(record.vehicle)}
-                </b>
-              </td>
 
-              <td>
-                ${esc(record.contact)}
-              </td>
+                <td>
+                  <b>
+                    ${esc(
+                      record.vehicle
+                    )}
+                  </b>
+                </td>
 
-              <td>
-                ${esc(record.pickup)}
-              </td>
 
-              <td>
-                ${esc(record.drop)}
-              </td>
+                <td>
+                  ${esc(
+                    record.contact
+                  )}
+                </td>
 
-              <td>
-                ${money(record.charges)}
-              </td>
 
-              <td>
+                <td>
+                  ${esc(
+                    record.pickup
+                  )}
+                </td>
 
-                <button
-                  class="delete"
-                  data-id="${record.id}"
-                >
-                  Delete
-                </button>
 
-              </td>
+                <td>
+                  ${esc(
+                    record.drop
+                  )}
+                </td>
 
-            </tr>
 
-          `)
+                <td>
+                  ${money(
+                    record.charges
+                  )}
+                </td>
+
+
+                <td>
+
+                  <button
+                    class="delete"
+                    data-id="${record.id}"
+                    type="button"
+                  >
+                    Delete
+                  </button>
+
+                </td>
+
+              </tr>
+
+            `
+          )
           .join("")
 
         :
@@ -322,6 +498,54 @@ if (
 
         `;
 
+
+    /* =================================================
+       PAGINATION INFO
+    ================================================= */
+
+    const pageInfo =
+      $("#recordsPageInfo");
+
+
+    const previous =
+      $("#prevRecords");
+
+
+    const next =
+      $("#nextRecords");
+
+
+    if (pageInfo) {
+
+      pageInfo.textContent =
+        filtered.length
+
+          ?
+
+          `Page ${currentPage} of ${totalPages} · ${filtered.length} records`
+
+          :
+
+          "Page 1 · 0 records";
+
+    }
+
+
+    if (previous) {
+
+      previous.disabled =
+        currentPage <= 1;
+
+    }
+
+
+    if (next) {
+
+      next.disabled =
+        currentPage >= totalPages;
+
+    }
+
   };
 
 
@@ -329,253 +553,393 @@ if (
      SAVE VEHICLE
   =================================================== */
 
-  $("#recordForm").onsubmit =
-    event => {
+  if ($("#recordForm")) {
 
-      event.preventDefault();
+    $("#recordForm").onsubmit =
+      event => {
 
-
-      const form =
-        new FormData(event.target);
+        event.preventDefault();
 
 
-      const vehicleData = {
+        const form =
+          new FormData(
+            event.target
+          );
 
-        type:
-          "vehicle",
 
-        id:
-          crypto.randomUUID(),
-
-        date:
-          form.get("date"),
-
-        vehicle:
-          String(
-            form.get("vehicle") || ""
-          )
-            .trim()
-            .toUpperCase(),
-
-        contact:
+        const contact =
           String(
             form.get("contact") || ""
           )
-            .trim(),
+            .trim();
 
-        pickup:
-          String(
-            form.get("pickup") || ""
-          )
-            .trim(),
 
-        drop:
-          String(
-            form.get("drop") || ""
-          )
-            .trim(),
+        const vehicleData = {
 
-        charges:
-          Number(
-            form.get("charges") || 0
-          )
+          type:
+            "vehicle",
+
+          id:
+            crypto.randomUUID(),
+
+          date:
+            form.get("date"),
+
+          vehicle:
+            String(
+              form.get("vehicle") || ""
+            )
+              .trim()
+              .toUpperCase(),
+
+          contact,
+
+          pickup:
+            String(
+              form.get("pickup") || ""
+            )
+              .trim(),
+
+          drop:
+            String(
+              form.get("drop") || ""
+            )
+              .trim(),
+
+          charges:
+            Number(
+              form.get("charges") || 0
+            )
+
+        };
+
+
+        records.push(
+          vehicleData
+        );
+
+
+        put(
+          "mts-final-records",
+          records
+        );
+
+
+        event.target.reset();
+
+
+        if ($("#date")) {
+
+          $("#date").value =
+            today;
+
+        }
+
+
+        currentPage = 1;
+
+
+        render();
+
+
+        if ($("#recordMessage")) {
+
+          $("#recordMessage")
+            .textContent =
+              "✓ Vehicle record saved.";
+
+        }
+
+
+        sendToGoogleSheets(
+          vehicleData
+        );
+
+
+        setTimeout(
+          () => {
+
+            if (
+              $("#recordMessage")
+            ) {
+
+              $("#recordMessage")
+                .textContent = "";
+
+            }
+
+          },
+          2500
+        );
 
       };
 
-
-      records.push(
-        vehicleData
-      );
-
-
-      put(
-        "mts-final-records",
-        records
-      );
-
-
-      event.target.reset();
-
-
-      $("#date").value =
-        today;
-
-
-      render();
-
-
-      $("#recordMessage")
-        .textContent =
-          "✓ Vehicle record saved.";
-
-
-      sendToGoogleSheets(
-        vehicleData
-      );
-
-
-      setTimeout(() => {
-
-        $("#recordMessage")
-          .textContent = "";
-
-      }, 2500);
-
-    };
+  }
 
 
   /* ===================================================
      SEARCH
   =================================================== */
 
-  $("#dateSearch").onchange =
-    render;
+  if ($("#dateSearch")) {
 
-  $("#vehicleSearch").oninput =
-    render;
+    $("#dateSearch").onchange =
+      () => {
+
+        currentPage = 1;
+
+        render();
+
+      };
+
+  }
+
+
+  if ($("#vehicleSearch")) {
+
+    $("#vehicleSearch").oninput =
+      () => {
+
+        currentPage = 1;
+
+        render();
+
+      };
+
+  }
 
 
   /* ===================================================
      CLEAR SEARCH
   =================================================== */
 
-  $("#clearSearch").onclick =
-    () => {
+  if ($("#clearSearch")) {
 
-      $("#dateSearch").value =
-        "";
+    $("#clearSearch").onclick =
+      () => {
 
-      $("#vehicleSearch").value =
-        "";
+        if ($("#dateSearch")) {
 
-      render();
+          $("#dateSearch").value =
+            "";
 
-    };
+        }
+
+
+        if ($("#vehicleSearch")) {
+
+          $("#vehicleSearch").value =
+            "";
+
+        }
+
+
+        currentPage = 1;
+
+        render();
+
+      };
+
+  }
+
+
+  /* ===================================================
+     PREVIOUS VEHICLE PAGE
+  =================================================== */
+
+  if ($("#prevRecords")) {
+
+    $("#prevRecords").onclick =
+      () => {
+
+        if (
+          currentPage > 1
+        ) {
+
+          currentPage--;
+
+          render();
+
+
+          $("#recordsBody")
+            ?.closest(".table-card")
+            ?.scrollIntoView({
+              behavior:
+                "smooth",
+
+              block:
+                "start"
+            });
+
+        }
+
+      };
+
+  }
+
+
+  /* ===================================================
+     NEXT VEHICLE PAGE
+  =================================================== */
+
+  if ($("#nextRecords")) {
+
+    $("#nextRecords").onclick =
+      () => {
+
+        currentPage++;
+
+        render();
+
+
+        $("#recordsBody")
+          ?.closest(".table-card")
+          ?.scrollIntoView({
+            behavior:
+              "smooth",
+
+            block:
+              "start"
+          });
+
+      };
+
+  }
 
 
   /* ===================================================
      DELETE VEHICLE
   =================================================== */
 
-  $("#recordsBody").onclick =
-    event => {
+  if ($("#recordsBody")) {
 
-      if (
-        !event.target.matches(".delete")
-      ) {
+    $("#recordsBody").onclick =
+      event => {
 
-        return;
+        if (
+          !event.target.matches(
+            ".delete"
+          )
+        ) {
 
-      }
+          return;
 
-
-      const id =
-        event.target.dataset.id;
-
-
-      if (
-        !confirm(
-          "Delete this vehicle record?\n\nIts Accounts entry will also be deleted."
-        )
-      ) {
-
-        return;
-
-      }
+        }
 
 
-      const deletedRecord =
-        records.find(
-          record =>
-            record.id === id
+        const id =
+          event.target.dataset.id;
+
+
+        if (
+          !confirm(
+            "Delete this vehicle record?\n\nIts Accounts entry will also be deleted."
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const deletedRecord =
+          records.find(
+            record =>
+              record.id === id
+          );
+
+
+        records =
+          records.filter(
+            record =>
+              record.id !== id
+          );
+
+
+        put(
+          "mts-final-records",
+          records
         );
 
 
-      records =
-        records.filter(
-          record =>
-            record.id !== id
+        let accounts =
+          get("mts-final-accounts");
+
+
+        const deletedAccounts =
+          accounts.filter(
+            account =>
+              account.recordId === id
+          );
+
+
+        accounts =
+          accounts.filter(
+            account =>
+              account.recordId !== id
+          );
+
+
+        put(
+          "mts-final-accounts",
+          accounts
         );
 
 
-      put(
-        "mts-final-records",
-        records
-      );
-
-
-      let accounts =
-        get("mts-final-accounts");
-
-
-      const deletedAccounts =
-        accounts.filter(
-          account =>
-            account.recordId === id
-        );
-
-
-      accounts =
-        accounts.filter(
-          account =>
-            account.recordId !== id
-        );
-
-
-      put(
-        "mts-final-accounts",
-        accounts
-      );
-
-
-      if (deletedRecord) {
-
-        sendToGoogleSheets({
-
-          type:
-            "deleteVehicle",
-
-          date:
-            deletedRecord.date,
-
-          vehicle:
-            deletedRecord.vehicle
-
-        });
-
-      }
-
-
-      deletedAccounts.forEach(
-        account => {
+        if (deletedRecord) {
 
           sendToGoogleSheets({
 
             type:
-              "deleteAccount",
-
-            id:
-              account.id,
-
-            recordId:
-              account.recordId,
+              "deleteVehicle",
 
             date:
-              account.date,
+              deletedRecord.date,
 
             vehicle:
-              account.vehicle
+              deletedRecord.vehicle
 
           });
 
         }
-      );
 
 
-      render();
+        deletedAccounts.forEach(
+          account => {
 
-    };
+            sendToGoogleSheets({
 
+              type:
+                "deleteAccount",
+
+              id:
+                account.id,
+
+              recordId:
+                account.recordId,
+
+              date:
+                account.date,
+
+              vehicle:
+                account.vehicle
+
+            });
+
+          }
+        );
+
+
+        render();
+
+      };
+
+  }
+
+
+  /* ===================================================
+     INITIAL VEHICLE RENDER
+  =================================================== */
 
   render();
 
@@ -593,32 +957,58 @@ if (
   let records =
     get("mts-final-records");
 
+
   let accounts =
     get("mts-final-accounts");
+
+
+  /* ===================================================
+     ACCOUNTS PAGINATION
+  =================================================== */
+
+  const EXPENSES_PER_PAGE = 25;
+
+  let expenseCurrentPage = 1;
 
 
   /* ===================================================
      DEFAULT DATES
   =================================================== */
 
-  $("#accountDate").value =
-    today;
+  if ($("#accountDate")) {
+
+    $("#accountDate").value =
+      today;
+
+  }
 
 
   const currentYear =
     new Date().getFullYear();
 
 
-  $("#fromDate").value =
-    `${currentYear}-01-01`;
+  if ($("#fromDate")) {
+
+    $("#fromDate").value =
+      `${currentYear}-01-01`;
+
+  }
 
 
-  $("#toDate").value =
-    today;
+  if ($("#toDate")) {
+
+    $("#toDate").value =
+      today;
+
+  }
 
 
-  $("#monthPick").value =
-    today.slice(0, 7);
+  if ($("#monthPick")) {
+
+    $("#monthPick").value =
+      today.slice(0, 7);
+
+  }
 
 
   /* ===================================================
@@ -664,12 +1054,23 @@ if (
       },
 
       {
-        charges: 0,
-        diesel: 0,
-        toll: 0,
-        repair: 0,
-        maintenance: 0,
-        profit: 0
+        charges:
+          0,
+
+        diesel:
+          0,
+
+        toll:
+          0,
+
+        repair:
+          0,
+
+        maintenance:
+          0,
+
+        profit:
+          0
       }
 
     );
@@ -682,6 +1083,15 @@ if (
   =================================================== */
 
   const jobs = () => {
+
+    if (
+      !$("#accountDate")
+    ) {
+
+      return;
+
+    }
+
 
     const date =
       $("#accountDate").value;
@@ -713,14 +1123,20 @@ if (
           )
 
           .map(
-            account =>
-              [
-                account.recordId,
-                account
-              ]
+            account => [
+              account.recordId,
+              account
+            ]
           )
 
       );
+
+
+    if (!$("#jobsList")) {
+
+      return;
+
+    }
 
 
     $("#jobsList").innerHTML =
@@ -758,17 +1174,25 @@ if (
                   data-id="${record.id}"
                 >
 
+
                   <div class="job-title">
 
                     <b>
                       ${index + 1}.
-                      ${esc(record.vehicle)}
+                      ${esc(
+                        record.vehicle
+                      )}
                     </b>
 
+
                     <small>
-                      ${esc(record.pickup)}
+                      ${esc(
+                        record.pickup
+                      )}
                       →
-                      ${esc(record.drop)}
+                      ${esc(
+                        record.drop
+                      )}
                     </small>
 
                   </div>
@@ -781,7 +1205,9 @@ if (
                     <br>
 
                     <b>
-                      ${money(record.charges)}
+                      ${money(
+                        record.charges
+                      )}
                     </b>
 
                   </div>
@@ -869,7 +1295,8 @@ if (
             No towing vehicle record exists
             for this date.
 
-            <br><br>
+            <br>
+            <br>
 
             Add it first from Vehicle Records.
 
@@ -889,83 +1316,89 @@ if (
 
   const live = () => {
 
+    if (
+      !$("#dailyProfitLabel")
+    ) {
+
+      return;
+
+    }
+
+
     const current =
 
       [
-        ...document.querySelectorAll(".job")
+        ...document.querySelectorAll(
+          ".job"
+        )
       ]
 
-        .map(job => {
+        .map(
+          job => {
 
-          const record =
-            records.find(
-              item =>
-                item.id ===
-                job.dataset.id
-            );
-
-
-          const charges =
-            Number(
-              record?.charges || 0
-            );
+            const record =
+              records.find(
+                item =>
+                  item.id ===
+                  job.dataset.id
+              );
 
 
-          const diesel =
-            Number(
-              job.querySelector(".diesel")
-                ?.value || 0
-            );
+            const charges =
+              Number(
+                record?.charges || 0
+              );
 
 
-          const toll =
-            Number(
-              job.querySelector(".toll")
-                ?.value || 0
-            );
+            const diesel =
+              Number(
+                job.querySelector(
+                  ".diesel"
+                )?.value || 0
+              );
 
 
-          const repair =
-            Number(
-              job.querySelector(".repair")
-                ?.value || 0
-            );
+            const toll =
+              Number(
+                job.querySelector(
+                  ".toll"
+                )?.value || 0
+              );
 
 
-          /*
-             SELECTED DATE PROFIT
-
-             Charges
-             - Diesel
-             - Toll
-
-             Repair NOT deducted.
-          */
-
-          const profit =
-            charges -
-            diesel -
-            toll;
+            const repair =
+              Number(
+                job.querySelector(
+                  ".repair"
+                )?.value || 0
+              );
 
 
-          return {
+            const profit =
+              charges -
+              diesel -
+              toll;
 
-            charges,
 
-            diesel,
+            return {
 
-            toll,
+              charges,
 
-            repair,
+              diesel,
 
-            maintenance:
-              toll + repair,
+              toll,
 
-            profit
+              repair,
 
-          };
+              maintenance:
+                toll + repair,
 
-        });
+              profit
+
+            };
+
+          }
+        );
 
 
     const total =
@@ -996,12 +1429,23 @@ if (
         },
 
         {
-          charges: 0,
-          diesel: 0,
-          toll: 0,
-          repair: 0,
-          maintenance: 0,
-          profit: 0
+          charges:
+            0,
+
+          diesel:
+            0,
+
+          toll:
+            0,
+
+          repair:
+            0,
+
+          maintenance:
+            0,
+
+          profit:
+            0
         }
 
       );
@@ -1012,7 +1456,9 @@ if (
       Profit for selected date
 
       <b>
-        ${money(total.profit)}
+        ${money(
+          total.profit
+        )}
       </b>
 
     `;
@@ -1024,258 +1470,266 @@ if (
      SAVE DAILY ACCOUNTS
   =================================================== */
 
-  $("#saveAccounts").onclick =
-    () => {
+  if ($("#saveAccounts")) {
 
-      const date =
-        $("#accountDate").value;
+    $("#saveAccounts").onclick =
+      () => {
 
-
-      const jobElements =
-        [
-          ...document.querySelectorAll(".job")
-        ];
+        const date =
+          $("#accountDate").value;
 
 
-      if (
-        !jobElements.length
-      ) {
+        const jobElements =
+          [
+            ...document.querySelectorAll(
+              ".job"
+            )
+          ];
+
+
+        if (
+          !jobElements.length
+        ) {
+
+          $("#accountMessage")
+            .textContent =
+              "⚠️ No vehicle records for this date.";
+
+          return;
+
+        }
+
+
+        const newRows =
+          jobElements
+
+            .map(
+              job => {
+
+                const record =
+                  records.find(
+                    item =>
+                      item.id ===
+                      job.dataset.id
+                  );
+
+
+                if (!record) {
+
+                  return null;
+
+                }
+
+
+                const diesel =
+                  Number(
+                    job.querySelector(
+                      ".diesel"
+                    )?.value || 0
+                  );
+
+
+                const toll =
+                  Number(
+                    job.querySelector(
+                      ".toll"
+                    )?.value || 0
+                  );
+
+
+                const repair =
+                  Number(
+                    job.querySelector(
+                      ".repair"
+                    )?.value || 0
+                  );
+
+
+                const details =
+                  job.querySelector(
+                    ".details"
+                  )?.value
+                    .trim() || "";
+
+
+                const profit =
+                  Number(
+                    record.charges || 0
+                  ) -
+                  diesel -
+                  toll;
+
+
+                const maintenance =
+                  toll +
+                  repair;
+
+
+                const existing =
+                  accounts.find(
+                    account =>
+                      account.recordId ===
+                      record.id
+                  );
+
+
+                return {
+
+                  id:
+                    existing?.id ||
+                    crypto.randomUUID(),
+
+                  recordId:
+                    record.id,
+
+                  date,
+
+                  vehicle:
+                    record.vehicle,
+
+                  pickup:
+                    record.pickup,
+
+                  drop:
+                    record.drop,
+
+                  charges:
+                    Number(
+                      record.charges || 0
+                    ),
+
+                  diesel,
+
+                  toll,
+
+                  repair,
+
+                  maintenance,
+
+                  details,
+
+                  profit
+
+                };
+
+              }
+            )
+
+            .filter(Boolean);
+
+
+        /* =============================================
+           LOCAL SAVE
+        ============================================= */
+
+        accounts =
+          accounts
+
+            .filter(
+              account =>
+                account.date !== date
+            )
+
+            .concat(
+              newRows
+            );
+
+
+        put(
+          "mts-final-accounts",
+          accounts
+        );
+
 
         $("#accountMessage")
           .textContent =
-            "⚠️ No vehicle records for this date.";
-
-        return;
-
-      }
+            "✓ Entries saved.";
 
 
-      const newRows =
-        jobElements
+        /* =============================================
+           GOOGLE SHEETS
+        ============================================= */
 
-          .map(job => {
+        newRows.forEach(
+          row => {
 
-            const record =
-              records.find(
-                item =>
-                  item.id ===
-                  job.dataset.id
-              );
+            sendToGoogleSheets({
+
+              type:
+                "account",
+
+              id:
+                row.id,
+
+              recordId:
+                row.recordId,
+
+              date:
+                row.date,
+
+              vehicle:
+                row.vehicle,
+
+              pickup:
+                row.pickup,
+
+              drop:
+                row.drop,
+
+              charges:
+                row.charges,
+
+              diesel:
+                row.diesel,
+
+              toll:
+                row.toll,
+
+              repair:
+                row.repair,
+
+              repairing:
+                row.repair,
+
+              maintenance:
+                row.maintenance,
+
+              details:
+                row.details,
+
+              profit:
+                row.profit
+
+            });
+
+          }
+        );
 
 
-            if (!record) {
+        jobs();
 
-              return null;
+        report();
+
+
+        setTimeout(
+          () => {
+
+            if (
+              $("#accountMessage")
+            ) {
+
+              $("#accountMessage")
+                .textContent = "";
 
             }
 
+          },
+          2500
+        );
 
-            const diesel =
-              Number(
-                job.querySelector(".diesel")
-                  ?.value || 0
-              );
+      };
 
-
-            const toll =
-              Number(
-                job.querySelector(".toll")
-                  ?.value || 0
-              );
-
-
-            const repair =
-              Number(
-                job.querySelector(".repair")
-                  ?.value || 0
-              );
-
-
-            const details =
-              job.querySelector(".details")
-                ?.value
-                .trim() || "";
-
-
-            /*
-               SELECTED DATE PROFIT
-
-               Charges
-               - Diesel
-               - Toll
-
-               Repair NOT deducted.
-            */
-
-            const profit =
-              Number(
-                record.charges || 0
-              ) -
-              diesel -
-              toll;
-
-
-            /*
-               MAINTENANCE
-
-               Toll + Repair
-            */
-
-            const maintenance =
-              toll + repair;
-
-
-            const existing =
-              accounts.find(
-                account =>
-                  account.recordId ===
-                  record.id
-              );
-
-
-            return {
-
-              id:
-                existing?.id ||
-                crypto.randomUUID(),
-
-              recordId:
-                record.id,
-
-              date,
-
-              vehicle:
-                record.vehicle,
-
-              pickup:
-                record.pickup,
-
-              drop:
-                record.drop,
-
-              charges:
-                Number(
-                  record.charges || 0
-                ),
-
-              diesel,
-
-              toll,
-
-              repair,
-
-              maintenance,
-
-              details,
-
-              profit
-
-            };
-
-          })
-
-          .filter(Boolean);
-
-
-      /* =================================================
-         LOCAL SAVE
-      ================================================= */
-
-      accounts =
-        accounts
-
-          .filter(
-            account =>
-              account.date !== date
-          )
-
-          .concat(
-            newRows
-          );
-
-
-      put(
-        "mts-final-accounts",
-        accounts
-      );
-
-
-      $("#accountMessage")
-        .textContent =
-          "✓ Entries saved.";
-
-
-      /* =================================================
-         GOOGLE SHEETS
-      ================================================= */
-
-      newRows.forEach(row => {
-
-        sendToGoogleSheets({
-
-          type:
-            "account",
-
-          id:
-            row.id,
-
-          recordId:
-            row.recordId,
-
-          date:
-            row.date,
-
-          vehicle:
-            row.vehicle,
-
-          pickup:
-            row.pickup,
-
-          drop:
-            row.drop,
-
-          charges:
-            row.charges,
-
-          diesel:
-            row.diesel,
-
-          toll:
-            row.toll,
-
-          repair:
-            row.repair,
-
-          repairing:
-            row.repair,
-
-          maintenance:
-            row.maintenance,
-
-          details:
-            row.details,
-
-          profit:
-            row.profit
-
-        });
-
-      });
-
-
-      jobs();
-
-      report();
-
-
-      setTimeout(() => {
-
-        $("#accountMessage")
-          .textContent = "";
-
-      }, 2500);
-
-    };
+  }
 
 
   /* ===================================================
@@ -1284,29 +1738,33 @@ if (
 
   const report = () => {
 
+    accounts =
+      get("mts-final-accounts");
+
+
     const from =
-      $("#fromDate").value;
+      $("#fromDate")?.value || "";
 
 
     const to =
-      $("#toDate").value;
-
-
-    accounts =
-      get("mts-final-accounts");
+      $("#toDate")?.value || "";
 
 
     const filtered =
       accounts.filter(
         account =>
 
-          (!from ||
-            account.date >= from)
+          (
+            !from ||
+            account.date >= from
+          )
 
           &&
 
-          (!to ||
-            account.date <= to)
+          (
+            !to ||
+            account.date <= to
+          )
 
       );
 
@@ -1315,41 +1773,54 @@ if (
       sum(filtered);
 
 
-    $("#totalCharges").textContent =
-      money(
-        totals.charges
-      );
+    /* =================================================
+       SUMMARY
+    ================================================= */
+
+    if ($("#totalCharges")) {
+
+      $("#totalCharges")
+        .textContent =
+          money(
+            totals.charges
+          );
+
+    }
 
 
-    $("#totalDiesel").textContent =
-      money(
-        totals.diesel
-      );
+    if ($("#totalDiesel")) {
+
+      $("#totalDiesel")
+        .textContent =
+          money(
+            totals.diesel
+          );
+
+    }
 
 
-    $("#totalMaintenance").textContent =
-      money(
-        totals.maintenance
-      );
+    if ($("#totalMaintenance")) {
+
+      $("#totalMaintenance")
+        .textContent =
+          money(
+            totals.maintenance
+          );
+
+    }
 
 
-    /*
-       PERIOD PROFIT
+    if ($("#totalProfit")) {
 
-       Total Charges
-       - Total Diesel
-       - Total Maintenance
+      $("#totalProfit")
+        .textContent =
+          money(
+            totals.charges -
+            totals.diesel -
+            totals.maintenance
+          );
 
-       Maintenance =
-       Toll + Repair
-    */
-
-    $("#totalProfit").textContent =
-      money(
-        totals.charges -
-        totals.diesel -
-        totals.maintenance
-      );
+    }
 
 
     /* =================================================
@@ -1359,43 +1830,51 @@ if (
     const groups = {};
 
 
-    accounts.forEach(account => {
+    accounts.forEach(
+      account => {
 
-      const month =
-        String(
-          account.date || ""
-        )
-          .slice(0, 7);
+        const month =
+          String(
+            account.date || ""
+          )
+            .slice(0, 7);
 
 
-      if (!month) {
+        if (!month) {
 
-        return;
+          return;
+
+        }
+
+
+        if (
+          !groups[month]
+        ) {
+
+          groups[month] = [];
+
+        }
+
+
+        groups[month].push(
+          account
+        );
 
       }
-
-
-      if (!groups[month]) {
-
-        groups[month] = [];
-
-      }
-
-
-      groups[month].push(
-        account
-      );
-
-    });
+    );
 
 
     const monthlyRows =
 
-      Object.entries(groups)
+      Object.entries(
+        groups
+      )
 
         .sort(
           (a, b) =>
-            b[0].localeCompare(a[0])
+            b[0].localeCompare(
+              a[0]
+            )
         )
 
         .map(
@@ -1432,14 +1911,18 @@ if (
               <tr>
 
                 <td>
+
                   <b>
                     ${monthName}
                   </b>
+
                 </td>
+
 
                 <td>
                   ${list.length}
                 </td>
+
 
                 <td>
                   ${money(
@@ -1447,17 +1930,20 @@ if (
                   )}
                 </td>
 
+
                 <td>
                   ${money(
                     total.diesel
                   )}
                 </td>
 
+
                 <td>
                   ${money(
                     total.maintenance
                   )}
                 </td>
+
 
                 <td
                   class="${
@@ -1466,7 +1952,11 @@ if (
                       : "good"
                   }"
                 >
-                  ${money(profit)}
+
+                  ${money(
+                    profit
+                  )}
+
                 </td>
 
               </tr>
@@ -1478,57 +1968,124 @@ if (
         .join("");
 
 
-    $("#monthlyBody").innerHTML =
-      monthlyRows ||
+    if (
+      $("#monthlyBody")
+    ) {
 
-      `
+      $("#monthlyBody").innerHTML =
+        monthlyRows ||
 
-        <tr>
+        `
 
-          <td
-            colspan="6"
-            class="empty"
-          >
-            No account entries yet.
-          </td>
+          <tr>
 
-        </tr>
+            <td
+              colspan="6"
+              class="empty"
+            >
+              No account entries yet.
+            </td>
 
-      `;
+          </tr>
+
+        `;
+
+    }
 
 
     /* =================================================
-       EXPENSE HISTORY
-       
-       IMPORTANT:
-       Maintenance Total REMOVED.
-
-       New columns:
-
-       Date
-       Vehicle
-       Route
-       Charges
-       Diesel
-       Toll
-       Repairing
-       Maintenance Details
-       Profit
-       Action
+       COMPLETE EXPENSE HISTORY
     ================================================= */
 
-    const expenseRows =
-
+    const sortedAccounts =
       accounts
 
         .slice()
 
         .sort(
-          (a, b) =>
-            b.date.localeCompare(
-              a.date
-            )
+          (a, b) => {
+
+            const dateCompare =
+              String(
+                b.date || ""
+              )
+                .localeCompare(
+                  String(
+                    a.date || ""
+                  )
+                );
+
+
+            if (
+              dateCompare !== 0
+            ) {
+
+              return dateCompare;
+
+            }
+
+
+            return (
+              accounts.indexOf(b) -
+              accounts.indexOf(a)
+            );
+
+          }
+        );
+
+
+    /* =================================================
+       EXPENSE PAGE COUNT
+    ================================================= */
+
+    const totalExpensePages =
+      Math.max(
+        1,
+        Math.ceil(
+          sortedAccounts.length /
+          EXPENSES_PER_PAGE
         )
+      );
+
+
+    if (
+      expenseCurrentPage >
+      totalExpensePages
+    ) {
+
+      expenseCurrentPage =
+        totalExpensePages;
+
+    }
+
+
+    const expenseStart =
+      (
+        expenseCurrentPage -
+        1
+      ) *
+      EXPENSES_PER_PAGE;
+
+
+    const expenseEnd =
+      expenseStart +
+      EXPENSES_PER_PAGE;
+
+
+    const expenseList =
+      sortedAccounts.slice(
+        expenseStart,
+        expenseEnd
+      );
+
+
+    /* =================================================
+       EXPENSE TABLE
+    ================================================= */
+
+    const expenseRows =
+
+      expenseList
 
         .map(
           account => {
@@ -1541,17 +2098,6 @@ if (
               getRepair(account);
 
 
-            /*
-               PERIOD PROFIT
-
-               Charges
-               - Diesel
-               - Total Maintenance
-
-               Total Maintenance =
-               Toll + Repair
-            */
-
             const maintenance =
               maintenanceTotal(
                 account
@@ -1562,15 +2108,18 @@ if (
               Number(
                 account.charges || 0
               ) -
+
               Number(
                 account.diesel || 0
               ) -
+
               maintenance;
 
 
             return `
 
               <tr>
+
 
                 <!-- DATE -->
 
@@ -1584,24 +2133,30 @@ if (
                 <!-- VEHICLE -->
 
                 <td>
+
                   <b>
                     ${esc(
                       account.vehicle
                     )}
                   </b>
+
                 </td>
 
 
                 <!-- ROUTE -->
 
                 <td>
+
                   ${esc(
                     account.pickup
                   )}
+
                   →
+
                   ${esc(
                     account.drop
                   )}
+
                 </td>
 
 
@@ -1632,7 +2187,7 @@ if (
                 </td>
 
 
-                <!-- REPAIRING -->
+                <!-- REPAIR -->
 
                 <td>
                   ${money(
@@ -1641,13 +2196,15 @@ if (
                 </td>
 
 
-                <!-- MAINTENANCE DETAILS -->
+                <!-- DETAILS -->
 
                 <td>
+
                   ${esc(
                     account.details ||
                     "—"
                   )}
+
                 </td>
 
 
@@ -1656,13 +2213,21 @@ if (
                 <td
                   style="${
                     profit < 0
-                      ? "color:#dc1d2f;font-weight:800;"
-                      : "color:#109b66;font-weight:700;"
+
+                      ?
+
+                      "color:#dc1d2f;font-weight:800;"
+
+                      :
+
+                      "color:#109b66;font-weight:700;"
                   }"
                 >
+
                   ${money(
                     profit
                   )}
+
                 </td>
 
 
@@ -1673,47 +2238,111 @@ if (
                   <button
                     class="edit-account"
                     data-id="${account.id}"
+                    type="button"
                   >
                     Edit
                   </button>
 
+
                   <button
                     class="delete-account"
                     data-id="${account.id}"
+                    type="button"
                   >
                     Delete
                   </button>
 
                 </td>
 
+
               </tr>
 
             `;
 
           }
-
         )
-
         .join("");
 
 
-    $("#expensesBody").innerHTML =
-      expenseRows ||
+    if (
+      $("#expensesBody")
+    ) {
 
-      `
+      $("#expensesBody").innerHTML =
+        expenseRows ||
 
-        <tr>
+        `
 
-          <td
-            colspan="10"
-            class="empty"
-          >
-            No expense entries yet.
-          </td>
+          <tr>
 
-        </tr>
+            <td
+              colspan="10"
+              class="empty"
+            >
+              No expense entries yet.
+            </td>
 
-      `;
+          </tr>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       EXPENSE PAGINATION UI
+    ================================================= */
+
+    const expensePageInfo =
+      $("#expensesPageInfo");
+
+
+    const expensePrevious =
+      $("#prevExpenses");
+
+
+    const expenseNext =
+      $("#nextExpenses");
+
+
+    if (
+      expensePageInfo
+    ) {
+
+      expensePageInfo.textContent =
+
+        sortedAccounts.length
+
+          ?
+
+          `Page ${expenseCurrentPage} of ${totalExpensePages} · ${sortedAccounts.length} entries`
+
+          :
+
+          "Page 1 · 0 entries";
+
+    }
+
+
+    if (
+      expensePrevious
+    ) {
+
+      expensePrevious.disabled =
+        expenseCurrentPage <= 1;
+
+    }
+
+
+    if (
+      expenseNext
+    ) {
+
+      expenseNext.disabled =
+        expenseCurrentPage >=
+        totalExpensePages;
+
+    }
 
 
     idle();
@@ -1725,173 +2354,263 @@ if (
      EDIT / DELETE ACCOUNT
   =================================================== */
 
-  $("#expensesBody").onclick =
-    event => {
+  if (
+    $("#expensesBody")
+  ) {
+
+    $("#expensesBody").onclick =
+      event => {
 
 
-      /* -----------------------------------------------
-         DELETE
-      ------------------------------------------------ */
-
-      if (
-        event.target.matches(
-          ".delete-account"
-        )
-      ) {
-
-        const id =
-          event.target.dataset.id;
-
-
-        const account =
-          accounts.find(
-            item =>
-              item.id === id
-          );
-
-
-        if (!account) {
-
-          return;
-
-        }
-
+        /* =============================================
+           DELETE
+        ============================================= */
 
         if (
-          !confirm(
-            "Delete this expense entry?"
+          event.target.matches(
+            ".delete-account"
           )
         ) {
 
-          return;
-
-        }
-
-
-        accounts =
-          accounts.filter(
-            item =>
-              item.id !== id
-          );
+          const id =
+            event.target.dataset.id;
 
 
-        put(
-          "mts-final-accounts",
-          accounts
-        );
-
-
-        sendToGoogleSheets({
-
-          type:
-            "deleteAccount",
-
-          id:
-            account.id,
-
-          recordId:
-            account.recordId,
-
-          date:
-            account.date,
-
-          vehicle:
-            account.vehicle
-
-        });
-
-
-        jobs();
-
-        report();
-
-        return;
-
-      }
-
-
-      /* -----------------------------------------------
-         EDIT
-      ------------------------------------------------ */
-
-      if (
-        event.target.matches(
-          ".edit-account"
-        )
-      ) {
-
-        const id =
-          event.target.dataset.id;
-
-
-        const account =
-          accounts.find(
-            item =>
-              item.id === id
-          );
-
-
-        if (!account) {
-
-          return;
-
-        }
-
-
-        $("#accountDate").value =
-          account.date;
-
-
-        jobs();
-
-
-        setTimeout(() => {
-
-          const job =
-            document.querySelector(
-              `.job[data-id="${account.recordId}"]`
+          const account =
+            accounts.find(
+              item =>
+                item.id === id
             );
 
 
-          if (!job) {
+          if (!account) {
 
             return;
 
           }
 
 
-          job.scrollIntoView({
+          if (
+            !confirm(
+              "Delete this expense entry?"
+            )
+          ) {
+
+            return;
+
+          }
+
+
+          accounts =
+            accounts.filter(
+              item =>
+                item.id !== id
+            );
+
+
+          put(
+            "mts-final-accounts",
+            accounts
+          );
+
+
+          sendToGoogleSheets({
+
+            type:
+              "deleteAccount",
+
+            id:
+              account.id,
+
+            recordId:
+              account.recordId,
+
+            date:
+              account.date,
+
+            vehicle:
+              account.vehicle
+
+          });
+
+
+          jobs();
+
+          report();
+
+          return;
+
+        }
+
+
+        /* =============================================
+           EDIT
+        ============================================= */
+
+        if (
+          event.target.matches(
+            ".edit-account"
+          )
+        ) {
+
+          const id =
+            event.target.dataset.id;
+
+
+          const account =
+            accounts.find(
+              item =>
+                item.id === id
+            );
+
+
+          if (!account) {
+
+            return;
+
+          }
+
+
+          $("#accountDate").value =
+            account.date;
+
+
+          jobs();
+
+
+          setTimeout(
+            () => {
+
+              const job =
+                document.querySelector(
+                  `.job[data-id="${account.recordId}"]`
+                );
+
+
+              if (!job) {
+
+                return;
+
+              }
+
+
+              job.scrollIntoView({
+
+                behavior:
+                  "smooth",
+
+                block:
+                  "center"
+
+              });
+
+
+              job.style.outline =
+                "2px solid #dc1d2f";
+
+
+              setTimeout(
+                () => {
+
+                  job.style.outline =
+                    "";
+
+                },
+                2500
+              );
+
+
+              if (
+                $("#accountMessage")
+              ) {
+
+                $("#accountMessage")
+                  .textContent =
+                    "✎ Edit the values above and click Save Today's Entries.";
+
+              }
+
+            },
+            100
+          );
+
+        }
+
+      };
+
+  }
+
+
+  /* ===================================================
+     EXPENSE PREVIOUS PAGE
+  =================================================== */
+
+  if (
+    $("#prevExpenses")
+  ) {
+
+    $("#prevExpenses").onclick =
+      () => {
+
+        if (
+          expenseCurrentPage > 1
+        ) {
+
+          expenseCurrentPage--;
+
+          report();
+
+
+          $("#expensesBody")
+            ?.closest(".table-card")
+            ?.scrollIntoView({
+
+              behavior:
+                "smooth",
+
+              block:
+                "start"
+
+            });
+
+        }
+
+      };
+
+  }
+
+
+  /* ===================================================
+     EXPENSE NEXT PAGE
+  =================================================== */
+
+  if (
+    $("#nextExpenses")
+  ) {
+
+    $("#nextExpenses").onclick =
+      () => {
+
+        expenseCurrentPage++;
+
+        report();
+
+
+        $("#expensesBody")
+          ?.closest(".table-card")
+          ?.scrollIntoView({
 
             behavior:
               "smooth",
 
             block:
-              "center"
+              "start"
 
           });
 
+      };
 
-          job.style.outline =
-            "2px solid #dc1d2f";
-
-
-          setTimeout(() => {
-
-            job.style.outline =
-              "";
-
-          }, 2500);
-
-
-          $("#accountMessage")
-            .textContent =
-              "✎ Edit the values above and click Save Today's Entries.";
-
-        }, 100);
-
-      }
-
-    };
+  }
 
 
   /* ===================================================
@@ -1899,6 +2618,15 @@ if (
   =================================================== */
 
   const idle = () => {
+
+    if (
+      !$("#monthPick")
+    ) {
+
+      return;
+
+    }
+
 
     const month =
       $("#monthPick").value;
@@ -1993,46 +2721,60 @@ if (
         );
 
 
-    $("#idleIntro").textContent =
+    if (
+      $("#idleIntro")
+    ) {
 
-      days.length
+      $("#idleIntro").textContent =
 
-        ?
+        days.length
 
-        `${days.length} day(s) with no towing job in ${monthName}.`
+          ?
 
-        :
+          `${days.length} day(s) with no towing job in ${monthName}.`
 
-        "Great work — every day has at least one towing job.";
+          :
+
+          "Great work — every day has at least one towing job.";
+
+    }
 
 
-    $("#idleDays").innerHTML =
+    if (
+      $("#idleDays")
+    ) {
 
-      days
+      $("#idleDays").innerHTML =
 
-        .map(
-          day => `
+        days
 
-            <span class="idle-day">
+          .map(
+            day => `
 
-              ${day}
+              <span
+                class="idle-day"
+              >
 
-              ${new Date(
-                `${month}-01T00:00:00`
-              )
-                .toLocaleString(
-                  "en-IN",
-                  {
-                    month:
-                      "short"
-                  }
-                )}
+                ${day}
 
-            </span>
+                ${new Date(
+                  `${month}-01T00:00:00`
+                )
+                  .toLocaleString(
+                    "en-IN",
+                    {
+                      month:
+                        "short"
+                    }
+                  )}
 
-          `
-        )
-        .join("");
+              </span>
+
+            `
+          )
+          .join("");
+
+    }
 
   };
 
@@ -2041,28 +2783,82 @@ if (
      EVENT LISTENERS
   =================================================== */
 
-  $("#accountDate").onchange =
-    jobs;
+  if (
+    $("#accountDate")
+  ) {
+
+    $("#accountDate").onchange =
+      jobs;
+
+  }
 
 
-  $("#jobsList").oninput =
-    live;
+  if (
+    $("#jobsList")
+  ) {
+
+    $("#jobsList").oninput =
+      live;
+
+  }
 
 
-  $("#calculate").onclick =
-    report;
+  if (
+    $("#calculate")
+  ) {
+
+    $("#calculate").onclick =
+      () => {
+
+        expenseCurrentPage = 1;
+
+        report();
+
+      };
+
+  }
 
 
-  $("#fromDate").onchange =
-    report;
+  if (
+    $("#fromDate")
+  ) {
+
+    $("#fromDate").onchange =
+      () => {
+
+        expenseCurrentPage = 1;
+
+        report();
+
+      };
+
+  }
 
 
-  $("#toDate").onchange =
-    report;
+  if (
+    $("#toDate")
+  ) {
+
+    $("#toDate").onchange =
+      () => {
+
+        expenseCurrentPage = 1;
+
+        report();
+
+      };
+
+  }
 
 
-  $("#monthPick").onchange =
-    idle;
+  if (
+    $("#monthPick")
+  ) {
+
+    $("#monthPick").onchange =
+      idle;
+
+  }
 
 
   /* ===================================================
