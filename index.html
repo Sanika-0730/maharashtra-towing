@@ -160,12 +160,6 @@
 
       <form id="recordForm">
 
-        <!--
-          Unique ID
-
-          This will be used later to keep
-          Vehicle Records and Accounts synced.
-        -->
         <input
           type="hidden"
           id="recordId"
@@ -221,9 +215,9 @@
               id="contact"
               name="contact"
               type="tel"
-              inputmode="numeric"
-              maxlength="10"
-              placeholder="98765 43210"
+              inputmode="tel"
+              maxlength="16"
+              placeholder="+91 8180049827"
               autocomplete="tel"
               required
             >
@@ -288,9 +282,7 @@
         </div>
 
 
-        <!-- ==============================
-             SAVE BUTTON
-        =============================== -->
+        <!-- SAVE BUTTON -->
 
         <button
           id="saveRecordBtn"
@@ -309,9 +301,7 @@
         </button>
 
 
-        <!-- ==============================
-             MESSAGE
-        =============================== -->
+        <!-- MESSAGE -->
 
         <span
           id="recordMessage"
@@ -437,11 +427,6 @@
 
           <tbody id="recordsBody">
 
-            <!--
-              Records are loaded dynamically
-              by app.js.
-            -->
-
           </tbody>
 
         </table>
@@ -449,6 +434,41 @@
       </div>
 
     </section>
+
+
+    <!-- ==============================
+         PAGINATION
+         BELOW VEHICLE RECORD BOX
+    =============================== -->
+
+    <div
+      id="recordsPagination"
+      class="records-pagination"
+    >
+
+      <button
+        id="prevRecords"
+        class="btn outline"
+        type="button"
+      >
+        ← Previous
+      </button>
+
+
+      <span id="recordsPageInfo">
+        Page 1
+      </span>
+
+
+      <button
+        id="nextRecords"
+        class="btn outline"
+        type="button"
+      >
+        Next →
+      </button>
+
+    </div>
 
 
   </main>
