@@ -1439,3 +1439,694 @@ footer {
     grid-column: auto;
   }
 }
+/* =========================================================
+   PAGINATION
+   VEHICLE RECORDS + ACCOUNTS
+========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px 0 4px;
+}
+
+/* Previous / Next buttons */
+
+.pagination button,
+#prevRecords,
+#nextRecords,
+#prevAccounts,
+#nextAccounts {
+  min-width: 92px;
+  height: 38px;
+
+  padding: 0 16px;
+
+  border: 1px solid #d9dfe7;
+  border-radius: 7px;
+
+  background: #fff;
+  color: #303947;
+
+  cursor: pointer;
+
+  font: 800 12px Manrope, sans-serif;
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease,
+    transform .15s ease,
+    box-shadow .18s ease;
+}
+
+/* Hover */
+
+.pagination button:hover:not(:disabled),
+#prevRecords:hover:not(:disabled),
+#nextRecords:hover:not(:disabled),
+#prevAccounts:hover:not(:disabled),
+#nextAccounts:hover:not(:disabled) {
+  background: #fff0f1;
+  border-color: #e5aab1;
+  color: var(--red);
+
+  box-shadow: 0 3px 10px rgba(220, 29, 47, .08);
+}
+
+/* Click */
+
+.pagination button:active:not(:disabled),
+#prevRecords:active:not(:disabled),
+#nextRecords:active:not(:disabled),
+#prevAccounts:active:not(:disabled),
+#nextAccounts:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Disabled */
+
+.pagination button:disabled,
+#prevRecords:disabled,
+#nextRecords:disabled,
+#prevAccounts:disabled,
+#nextAccounts:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+
+  background: #f4f5f7;
+  color: #8a93a0;
+  border-color: #e2e5e9;
+
+  box-shadow: none;
+}
+
+/* Page information */
+
+#recordsPageInfo,
+#accountsPageInfo {
+  min-width: 145px;
+
+  text-align: center;
+
+  color: #697484;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   PAGINATION CARD
+========================================================= */
+
+.table-card + .pagination {
+  margin-bottom: 5px;
+}
+
+/* =========================================================
+   NEXT BUTTON HIGHLIGHT
+========================================================= */
+
+#nextRecords,
+#nextAccounts {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+#nextRecords:hover:not(:disabled),
+#nextAccounts:hover:not(:disabled) {
+  background: #c9182a;
+  border-color: #c9182a;
+  color: #fff;
+}
+
+/* Disabled Next should NOT stay red */
+
+#nextRecords:disabled,
+#nextAccounts:disabled {
+  background: #f4f5f7;
+  border-color: #e2e5e9;
+  color: #8a93a0;
+}
+
+/* =========================================================
+   MOBILE PAGINATION
+========================================================= */
+
+@media (max-width: 570px) {
+
+  .pagination {
+    gap: 7px;
+    margin-top: 14px;
+    padding-top: 8px;
+  }
+
+  .pagination button,
+  #prevRecords,
+  #nextRecords,
+  #prevAccounts,
+  #nextAccounts {
+    min-width: 82px;
+    height: 36px;
+    padding: 0 11px;
+    font-size: 11px;
+  }
+
+  #recordsPageInfo,
+  #accountsPageInfo {
+    min-width: 105px;
+    font-size: 10px;
+  }
+
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .pagination {
+    gap: 5px;
+  }
+
+  .pagination button,
+  #prevRecords,
+  #nextRecords,
+  #prevAccounts,
+  #nextAccounts {
+    min-width: 72px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
+  #recordsPageInfo,
+  #accountsPageInfo {
+    min-width: 88px;
+    font-size: 9px;
+  }
+
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Maharashtra Towing Service | Vehicle Records</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+</head>
+
+
+<body data-page="records">
+
+  <!-- ==============================
+       NAVIGATION
+  =============================== -->
+
+  <nav class="nav">
+
+    <a
+      class="brand"
+      href="index.html"
+    >
+
+      <img
+        src="assets/logo.jpeg"
+        alt="Maharashtra Towing Service logo"
+      >
+
+      <span>
+
+        <strong>
+          MAHARASHTRA
+        </strong>
+
+        <b>
+          TOWING SERVICE
+        </b>
+
+      </span>
+
+    </a>
+
+
+    <div class="navlinks">
+
+      <a
+        class="active"
+        href="index.html"
+      >
+        Vehicle Records
+      </a>
+
+      <a href="accounts.html">
+        Accounts &amp; Profit
+      </a>
+
+    </div>
+
+
+    <span class="service">
+      ● 24/7 TOWING SERVICE
+    </span>
+
+  </nav>
+
+
+  <!-- ==============================
+       MAIN CONTENT
+  =============================== -->
+
+  <main class="shell">
+
+
+    <!-- ==============================
+         HERO
+    =============================== -->
+
+    <section class="hero records-hero">
+
+      <div class="hero-copy">
+
+        <span class="kicker">
+          RELIABLE. FAST. PROFESSIONAL.
+        </span>
+
+        <h1>
+          Maharashtra
+          <br>
+          Towing Service
+        </h1>
+
+        <p>
+          Keep every towing job organised
+          in one secure digital register.
+        </p>
+
+      </div>
+
+
+      <img
+        src="assets/towing-van.jpeg"
+        alt="Maharashtra Towing Service vehicle"
+      >
+
+    </section>
+
+
+    <!-- ==============================
+         ADD VEHICLE RECORD
+    =============================== -->
+
+    <section class="title-row">
+
+      <div>
+
+        <span class="kicker red">
+          NEW VEHICLE RECORD
+        </span>
+
+        <h2>
+          Add a towing job
+        </h2>
+
+      </div>
+
+
+      <p>
+        Save each vehicle separately.
+        You can add any number of vehicles
+        for the same date.
+      </p>
+
+    </section>
+
+
+    <section class="card form-card">
+
+      <form id="recordForm">
+
+        <!--
+          Unique ID
+
+          This will be used later to keep
+          Vehicle Records and Accounts synced.
+        -->
+        <input
+          type="hidden"
+          id="recordId"
+          name="recordId"
+          value=""
+        >
+
+
+        <div class="grid three">
+
+
+          <!-- DATE -->
+
+          <label>
+
+            Date *
+
+            <input
+              id="date"
+              name="date"
+              type="date"
+              required
+            >
+
+          </label>
+
+
+          <!-- VEHICLE NUMBER -->
+
+          <label>
+
+            Vehicle Number *
+
+            <input
+              id="vehicle"
+              name="vehicle"
+              type="text"
+              placeholder="MH 12 AB 1234"
+              autocomplete="off"
+              required
+            >
+
+          </label>
+
+
+          <!-- CONTACT -->
+
+          <label>
+
+            Contact Number *
+
+            <input
+              id="contact"
+              name="contact"
+              type="tel"
+              inputmode="numeric"
+              maxlength="10"
+              placeholder="98765 43210"
+              autocomplete="tel"
+              required
+            >
+
+          </label>
+
+
+          <!-- PICKUP -->
+
+          <label>
+
+            Pickup Location *
+
+            <input
+              id="pickup"
+              name="pickup"
+              type="text"
+              placeholder="e.g. Pune"
+              autocomplete="off"
+              required
+            >
+
+          </label>
+
+
+          <!-- DROP -->
+
+          <label>
+
+            Drop Location *
+
+            <input
+              id="drop"
+              name="drop"
+              type="text"
+              placeholder="e.g. Mumbai"
+              autocomplete="off"
+              required
+            >
+
+          </label>
+
+
+          <!-- CHARGES -->
+
+          <label>
+
+            Charges (₹) *
+
+            <input
+              id="charges"
+              name="charges"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="0"
+              required
+            >
+
+          </label>
+
+        </div>
+
+
+        <!-- ==============================
+             SAVE BUTTON
+        =============================== -->
+
+        <button
+          id="saveRecordBtn"
+          class="btn"
+          type="submit"
+        >
+
+          <span id="saveRecordText">
+            Save Vehicle Record
+          </span>
+
+          <b>
+            →
+          </b>
+
+        </button>
+
+
+        <!-- ==============================
+             MESSAGE
+        =============================== -->
+
+        <span
+          id="recordMessage"
+          class="message"
+          aria-live="polite"
+        ></span>
+
+
+      </form>
+
+    </section>
+
+
+    <!-- ==============================
+         SAVED VEHICLES
+    =============================== -->
+
+    <section class="title-row section-space">
+
+      <div>
+
+        <span class="kicker red">
+          SAVED VEHICLES
+        </span>
+
+        <h2>
+          Vehicle movement register
+        </h2>
+
+      </div>
+
+
+      <!-- FILTERS -->
+
+      <div class="filters">
+
+
+        <label>
+
+          Search by Date
+
+          <input
+            id="dateSearch"
+            type="date"
+          >
+
+        </label>
+
+
+        <label>
+
+          Search Vehicle Number
+
+          <input
+            id="vehicleSearch"
+            type="search"
+            placeholder="MH 12..."
+            autocomplete="off"
+          >
+
+        </label>
+
+
+        <button
+          id="clearSearch"
+          class="btn outline"
+          type="button"
+        >
+          Clear filters
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==============================
+         VEHICLE TABLE
+    =============================== -->
+
+    <section class="card table-card">
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Date
+              </th>
+
+              <th>
+                Vehicle Number
+              </th>
+
+              <th>
+                Contact
+              </th>
+
+              <th>
+                Pickup
+              </th>
+
+              <th>
+                Drop
+              </th>
+
+              <th>
+                Charges
+              </th>
+
+              <th>
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="recordsBody">
+
+            <!--
+              Records are loaded dynamically
+              by app.js.
+            -->
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- ==============================
+       FOOTER
+  =============================== -->
+
+  <footer>
+    Maharashtra Towing Service · Vehicle Records
+  </footer>
+
+
+  <!-- ==============================
+       JAVASCRIPT
+  =============================== -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
+/* =====================================================
+   PAGINATION - VEHICLE & EXPENSE HISTORY
+===================================================== */
+
+.records-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 20px;
+  border-top: 1px solid var(--line);
+  margin-top: 0;
+}
+
+.records-pagination span {
+  min-width: 180px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.records-pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
